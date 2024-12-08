@@ -1,17 +1,17 @@
 import logging
 
 from flask import Flask, jsonify, render_template, request
-from services.calendar.calendar import add_event, get_events, db
+from services.calendar.calendar import add_event, get_events
 
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
-db.init_app(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
+# db.init_app(app)
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 @app.route('/')
 def home():

@@ -7,6 +7,25 @@ events = [
     {'title': 'Event 2', 'start': '2024-12-15'},
 ]
 
+def get_events():
+    """Retrieve all events."""
+    return jsonify(events)
+
+def add_event(data):
+    """Add a new event."""
+    if not data or 'title' not in data or 'start' not in data:
+        return jsonify({'error': 'Invalid data'}), 400
+
+    # Add event to the list
+    new_event = {
+        'title': data['title'],
+        'start': data['start'],
+        'end': data.get('end')  # Optional end date
+    }
+    events.append(new_event)
+    return jsonify({'message': 'Event added successfully'})
+
+"""
 db = SQLAlchemy()
 
 class Event(db.Model):
@@ -27,3 +46,4 @@ def add_event(data):
     db.session.add(new_event)
     db.session.commit()
     return jsonify({'message': 'Event added successfully'})
+"""
