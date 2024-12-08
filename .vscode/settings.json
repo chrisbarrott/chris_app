@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./chris_app/services/database"
+    ]
+}
