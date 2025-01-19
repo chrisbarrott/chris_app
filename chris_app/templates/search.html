@@ -28,21 +28,37 @@
     <script>
         document.getElementById("searchForm").addEventListener("submit", async (event) => {
             event.preventDefault();
-            const query = document.getElementById("searchInput").value;
+            const query = document.getElementById("searchInput").value.trim();
             const response = await fetch(`/search_dashboard?q=${encodeURIComponent(query)}`);
             const results = await response.json();
+    
             const resultsDiv = document.getElementById("searchResults");
             resultsDiv.innerHTML = "";
+    
             if (results.length > 0) {
                 results.forEach((result) => {
-                    const link = document.createElement("a");
-                    link.href = result.url;
-                    link.textContent = result.name;
-                    link.classList.add("d-block", "mb-2");
-                    resultsDiv.appendChild(link);
+                    const card = document.createElement("div");
+                    card.classList.add("card", "mb-3");
+                    card.style.display = "flex";
+                    card.style.flexDirection = "row";
+    
+                    const cardBody = `
+                        <div class="card-body" style="flex: 2;">
+                            <h5 class="card-title">${result.name}</h5>
+                            <p class="card-text">${result.description}</p>
+                            <p class="card-text">
+                                <small class="text-muted">Tags: ${result.tags.join(", ")}</small>
+                            </p>
+                            <a href="${result.url}" class="btn btn-primary">Open Dashboard</a>
+                        </div>
+                        <img src="${result.preview}" alt="Dashboard Preview" style="width: 200px; height: auto; object-fit: cover; flex: 1;">
+                    `;
+    
+                    card.innerHTML = cardBody;
+                    resultsDiv.appendChild(card);
                 });
             } else {
-                resultsDiv.textContent = "No dashboards found.";
+                resultsDiv.textContent = "No dashboards found. Please refine your query.";
             }
         });
     </script>

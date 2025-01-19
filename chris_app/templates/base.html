@@ -3,31 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Web App</title>
+    <title>Dashboard Search</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #cce5ff; /* Light blue background for the banner */
+            padding: 0;
+        }
+        .navbar-brand-box {
+            background-color: #99ccff; /* Slightly darker blue for the "Observability Tools" box */
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            height: 100%; /* Ensures full height within the banner */
+            display: flex;
+            align-items: center;
+        }
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+        .left-nav {
+            margin-left: 20px; /* Space between "Observability Tools" and "Dashboard Search" */
+        }
+        .right-nav {
+            margin-left: auto; /* Pushes "About" and "Calendar" to the far right */
+        }
+        .nav-link {
+            color: #0056b3;
+            font-weight: 500;
+            padding: 10px 15px;
+        }
+        .nav-link:hover {
+            background-color: #b3d9ff;
+            border-radius: 5px;
+        }
+    </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Welcome to CBA</a>
-            <ul class="navbar-nav">
+            <!-- "Observability Tools" header -->
+            <a class="navbar-brand navbar-brand-box" href="/">Observability Tools</a>
+            
+            <!-- Left navigation for "Dashboard Search" -->
+            <ul class="navbar-nav left-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/search">Dashboard Search</a>
                 </li>
+            </ul>
+            
+            <!-- Right navigation for "About" and "Calendar" -->
+            <ul class="navbar-nav right-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="/about">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/calendar">Calendar</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/search">Search Dashboard</a>
-                </li>
             </ul>
         </div>
     </nav>
+
     <div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

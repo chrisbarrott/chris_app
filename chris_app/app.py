@@ -67,10 +67,12 @@ def format_event_dates(events):
 
 @app.route('/search_dashboard', methods=['GET'])
 def search_dashboard():
-    query = request.args.get('q', '')
+    query = request.args.get("q", "").strip()
+    if not query:
+        return jsonify([]), 200
+
     results = search_dashboards(query)
     return jsonify(results), 200
-
 if __name__ == '__main__':
     app.run(debug=True)
     app.run(host='0.0.0.0', port=5000)
