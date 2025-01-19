@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Dashboard</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Find Your Dashboard</h1>
+        <form id="searchForm" class="text-center">
+            <input
+                type="text"
+                id="searchInput"
+                name="q"
+                class="form-control mb-3"
+                placeholder="What dashboard are you looking for?"
+                required
+            />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div id="searchResults" class="mt-4"></div>
+    </div>
+
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const query = document.getElementById("searchInput").value;
+            const response = await fetch(`/search_dashboard?q=${encodeURIComponent(query)}`);
+            const results = await response.json();
+            const resultsDiv = document.getElementById("searchResults");
+            resultsDiv.innerHTML = "";
+            if (results.length > 0) {
+                results.forEach((result) => {
+                    const link = document.createElement("a");
+                    link.href = result.url;
+                    link.textContent = result.name;
+                    link.classList.add("d-block", "mb-2");
+                    resultsDiv.appendChild(link);
+                });
+            } else {
+                resultsDiv.textContent = "No dashboards found.";
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

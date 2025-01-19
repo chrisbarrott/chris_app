@@ -1,7 +1,9 @@
 import logging
 
+from datetime import datetime
 from flask import Flask, jsonify, render_template, request
-from services.database.database import CalEvent, db, init_db
+from services.search.search import search_dashboards
+from services.database.database import CalEvent, db, delete_event_from_database, init_db, add_event_to_database, get_events_from_database
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -11,7 +13,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database
 init_db(app)
-
 with app.app_context():
     db.create_all()
 
@@ -28,43 +29,48 @@ def about():
 def calendar():
     return render_template('calendar.html')
 
-@app.route('/add_event', methods=['POST'])
-def add_event():
-    data = request.get_json()
-    if not data or 'title' not in data or 'start' not in data:
-        return jsonify({'error': 'Invalid data'}), 400
-
-    new_event = CalEvent(title=data['title'], start=data['start'], end=data.get('end'))
-    try:
-        db.session.add(new_event)
-        db.session.commit()
-        return jsonify({'message': 'Event added successfully'}), 201
-    except Exception as e:
-        print(f"Error adding event: {e}")
-        db.session.rollback()
-        return jsonify({'error': 'Database error'}), 500
+@app.route('/search', methods=['GET'])
+def search_page():
+    return render_template('search.html')
 
 @app.route('/get_events', methods=['GET'])
 def get_events():
-    try:
-        events = CalEvent.query.all()
-        events_list = [{'id': e.id, 'title': e.title, 'start': e.start, 'end': e.end} for e in events]
-        return jsonify(events_list)
-    except Exception as e:
-        print(f"Error fetching events: {e}")
-        return jsonify({'error': 'Database error'}), 500
+    success, message = get_events_from_database()
+    if success:
+        return jsonify({'message': message}), 200
+    else:
+        return jsonify({'error': message}), 400
+
+@app.route('/add_event', methods=['POST'])
+def add_event():
+    data = request.get_json()
+    success, message = add_event_to_database(data)
+    if success:
+        return jsonify({'message': message}), 200
+    else:
+        return jsonify({'error': message}), 400
+
+@app.route('/delete_event/<int:event_id>', methods=['DELETE'])
+def delete_event_route(event_id):
+    success, message = delete_event_from_database(event_id)
+    if success:
+        return jsonify({'message': message}), 200
+    else:
+        return jsonify({'error': message}), 400
+
+def format_event_dates(events):
+    for event in events:
+        # Ensure the start and end have time in the format 'YYYY-MM-DDTHH:MM:SS'
+        event['start'] = f"{event['start']}T00:00:00"  # Default to midnight
+        event['end'] = f"{event['end']}T23:59:59"  # Default end time to 23:59:59
+    return events
+
+@app.route('/search_dashboard', methods=['GET'])
+def search_dashboard():
+    query = request.args.get('q', '')
+    results = search_dashboards(query)
+    return jsonify(results), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
     app.run(host='0.0.0.0', port=5000)
-
-    
-# @app.route('/get_events', methods=['GET'])
-# def fetch_events():
-#     return get_events()
-
-# @app.route('/add_event', methods=['POST'])
-# def add_event():
-#     data = request.get_json()
-#     return add_event_to_database(data)
-
