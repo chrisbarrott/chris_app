@@ -3,3 +3,5 @@ chris_app/instance/events.db
 chris_app/services/calendar/__pycache__/calendar.cpython-311.pyc
 .gitignore
 chris_app/services/database/__pycache__/database.cpython-311.pyc
+instance/events.db
+chris_app/services/search/__pycache__/search.cpython-311.pyc

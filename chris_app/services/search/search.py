@@ -13,14 +13,14 @@ DASHBOARDS = [
         "url": "/dashboards/memory",
         "description": "Track memory usage trends and optimize applications.",
         "tags": ["Memory", "Usage", "Optimization"],
-        "preview": "/static/images/memory_dashboard.png",
+        "preview": "/static/images/memory_dashboard.jpeg",
     },
     {
         "name": "Network Traffic Dashboard",
         "url": "/dashboards/network",
         "description": "Analyze network traffic and detect anomalies.",
         "tags": ["Network", "Traffic", "Monitoring"],
-        "preview": "/static/images/network_dashboard.png",
+        "preview": "/static/images/network_dashboard.jpeg",
     },
 ]
 
